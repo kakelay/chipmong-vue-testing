@@ -2,9 +2,9 @@
 <template>
   <div>
     <h1>Car Wheel Tracker</h1>
-    <form @submit.prevent action="submit">
+    <form @submit.prevent="submitForm">
       <input v-model="carName" placeholder="Enter car name" />
-      <button @click="getCarInfo">Get Car Info</button>
+      <button type="submit">Get Car Info</button>
     </form>
 
     <div v-if="carInfo">
@@ -42,6 +42,7 @@ import CarService from "../services/CarService";
 
 export default defineComponent({
   name: "CarTracker",
+
   setup() {
     const carName = ref("");
     const carWheels = ref<number | null>(null);
@@ -51,12 +52,19 @@ export default defineComponent({
     const carList = ref<Array<{ id: number; name: string; wheels: number }>>(
       []
     );
+    const submitForm = async () => {
+      if (carName.value.trim() === "") {
+        alert("Please enter a car name.");
+        return;
+      }
+      await getCarInfo();
+    };
 
     const getCarInfo = async () => {
       try {
         const response = await CarService.getCarByName(carName.value);
         carInfo.value = response.data;
-        console.log(carInfo.value)
+        console.log(carInfo.value);
       } catch (error) {
         carInfo.value = null;
       }
@@ -88,6 +96,7 @@ export default defineComponent({
       carInfo,
       carList,
       getCarInfo,
+      submitForm,
       addCarInfo,
       getCarsByWheels,
       getAllCars,
