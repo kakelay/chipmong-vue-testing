@@ -2,8 +2,10 @@
 <template>
   <div>
     <h1>Car Wheel Tracker</h1>
-    <input v-model="carName" placeholder="Enter car name" />
-    <button @click="getCarInfo">Get Car Info</button>
+    <form @submit.prevent action="submit">
+      <input v-model="carName" placeholder="Enter car name" />
+      <button @click="getCarInfo">Get Car Info</button>
+    </form>
 
     <div v-if="carInfo">
       <p>{{ carInfo.name }} has {{ carInfo.wheels }} wheels.</p>
@@ -25,8 +27,9 @@
 
     <div v-if="carList.length > 0">
       <ul>
-        <li v-for="car in carList" :key="car.id">
-          {{ car.name }} ({{ car.wheels }} wheels)
+        <li v-for="(car, index) in carList" :key="index">
+          <!-- {{ car.name }} ({{ car.wheels }} wheels) -->
+          {{ car }}
         </li>
       </ul>
     </div>
@@ -53,6 +56,7 @@ export default defineComponent({
       try {
         const response = await CarService.getCarByName(carName.value);
         carInfo.value = response.data;
+        console.log(carInfo.value)
       } catch (error) {
         carInfo.value = null;
       }
@@ -63,6 +67,7 @@ export default defineComponent({
         const car = { name: carName.value, wheels: carWheels.value };
         await CarService.saveCar(car);
         carInfo.value = car;
+        console.log(car);
       }
     };
 
