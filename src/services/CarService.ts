@@ -8,7 +8,9 @@ class CarService {
   }
 
   getCarsByWheels(wheels: number) {
-    return axios.get(`${BaseUrl}/wheels/${wheels}`);
+    return axios.get(`${BaseUrl}/ask`, {
+      params: { name: `${wheels}-wheel-car` },
+    });
   }
 
   getAllCars() {

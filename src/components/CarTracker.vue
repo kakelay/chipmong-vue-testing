@@ -93,6 +93,7 @@ export default defineComponent({
       try {
         const response = await CarService.getCarsByWheels(wheels);
         carList.value = response.data;
+        console.log("Cars by wheels:", carList.value);
       } catch (error) {
         console.error("Error fetching cars by wheels:", error);
       }
